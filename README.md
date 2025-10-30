@@ -1,8 +1,18 @@
+
+
+
 # 🛡️ CyberGuard AI - Cybersecurity Threat Detection System
 
 A comprehensive, AI-powered cybersecurity threat detection system built on AWS using SageMaker, Lambda, and modern web technologies. This system provides real-time network traffic analysis using machine learning to identify potential security threats.
 
 ## 🏗️ Architecture
+
+
+![Architecture](https://github.com/user-attachments/assets/1d102fa3-faee-4b88-8a14-7efd43c8283a)
+
+
+
+
 
 The system consists of:
 - **AWS SageMaker**: ML model training and deployment
