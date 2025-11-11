@@ -5,8 +5,17 @@
 
 A comprehensive, AI-powered cybersecurity threat detection system built on AWS using SageMaker, Lambda, and modern web technologies. This system provides real-time network traffic analysis using machine learning to identify potential security threats.
 
-## 🏗️ Architecture
 
+#Video Demo
+
+
+
+https://github.com/user-attachments/assets/9c88acf5-ba02-438e-b3e6-e65e84e3dfff
+
+
+
+
+## 🏗️ Architecture
 
 ![Architecture](https://github.com/user-attachments/assets/1d102fa3-faee-4b88-8a14-7efd43c8283a)
 
