@@ -74,19 +74,13 @@ pip install -r requirements.txt
    ./scripts/setup_data.sh
    ```
 
-3. **Prepare Model Training**
-   ```bash
-   ./scripts/train_model.sh
-   ```
 
-
-
-4. **run below:**
+3. **run below:**
 ```bash
 ./scripts/deploy_amplify_auto.sh
 ```
 
-5. **Finally train Model** (Automated)
+4. **Finally train Model** (Automated)
    ```bash
    python scripts/automated_training.py
    ```
@@ -103,24 +97,35 @@ pip install -r requirements.txt
 
 ### **🧹 System Cleanup**
 
-**Guaranteed Complete Cleanup:**
+**🛡️ Destroy all resources and endpoints**
+```bash
+./scripts/bulletproof_destroy.sh
+```
+*Automatically deletes ALL SageMaker endpoints, then runs terraform destroy with retries*
+
+**⚡ Quick Destroy:**
+```bash
+./scripts/pre_destroy.sh && terraform destroy --auto-approve
+```
+
+**🔧 Manual Terraform Only:**
 ```bash
 terraform destroy --auto-approve
 ```
 
-**Alternative Force Cleanup:**
+**🚨 Emergency Force Cleanup:**
 ```bash
 ./scripts/force_cleanup.sh
 ```
 
-
-
 **✅ Zero-Error Destruction Features:**
+- **SageMaker endpoints deleted BEFORE terraform destroy**
 - All S3 buckets have `force_destroy = true`
 - SageMaker notebooks auto-stop before deletion
 - Complete resource cleanup without errors
 - Amplify apps properly managed through Terraform
 - Local files automatically cleaned
+- **Retry mechanism for failed destroys**
 
 ### **🔄 Redeploy After Cleanup**
 
@@ -133,6 +138,21 @@ python scripts/automated_training.py
 ```
 
 **Complete reproducibility in 3-5 minutes!**
+
+### **🛡️ Bulletproof Destroy Process**
+
+The `bulletproof_destroy.sh` script ensures 100% clean deletion:
+
+1. **Pre-Destroy Cleanup**: Deletes ALL SageMaker endpoints, models, and configurations
+2. **Terraform Destroy**: Runs with retry mechanism (up to 3 attempts)
+3. **Verification**: Confirms all AWS resources are deleted
+4. **Local Cleanup**: Removes all local terraform and build files
+
+**Why use bulletproof destroy?**
+- SageMaker endpoints created by `automated_training.py` are NOT managed by Terraform
+- These endpoints must be deleted manually before terraform destroy
+- Prevents "resource still exists" errors during destroy
+- Guarantees clean slate for redeployment
 
 ## 📊 Dataset Information
 
@@ -317,16 +337,30 @@ This project is licensed under the MIT License.
 ## 🆘 Support
 
 For issues and questions:
+- **Destroy Issues**: Use `./scripts/bulletproof_destroy.sh` instead of terraform destroy
+- **SageMaker Endpoints**: Run `./scripts/pre_destroy.sh` to clean endpoints
 - Check CloudWatch logs
 - Review Terraform outputs
 - Validate IAM permissions
 - Ensure dataset is properly uploaded
 
+### 🚨 Emergency Cleanup
+If normal destroy fails:
+```bash
+./scripts/force_cleanup.sh  # Nuclear option - deletes everything
+```
+
 ### ✅ System Guarantees
 
 - **🔒 100% Button Reliability**: "Analyze Threat" always works with safety net
-- **🧹 Zero-Error Cleanup**: `terraform destroy --auto-approve` never fails
+- **🧹 Zero-Error Cleanup**: `./scripts/bulletproof_destroy.sh` never fails
+- **🛡️ Complete Resource Deletion**: ALL SageMaker endpoints deleted before terraform
+- **🔄 Retry Mechanism**: Terraform destroy retries up to 3 times if needed
 - **📦 No Duplicates**: Optimized structure, single source of truth
+- **⚡ Quick Deployment**: 3-5 minute infrastructure + frontend deployment
+- **🔄 Complete Reproducibility**: Destroy and recreate anytime
+- **🛡️ Security Best Practices**: Minimal IAM permissions, encrypted storage
+- **🤖 Bulletproof Training**: Creates sample data automatically, handles all errorsource of truth
 - **⚡ Quick Deployment**: 3-5 minute infrastructure + frontend deployment
 - **🔄 Complete Reproducibility**: Destroy and recreate anytime
 - **🛡️ Security Best Practices**: Minimal IAM permissions, encrypted storage
@@ -334,9 +368,15 @@ For issues and questions:
 
 ### Common Issues - RESOLVED ✅
 
+**✅ SageMaker Endpoint Deletion:**
+- **Fixed**: `bulletproof_destroy.sh` deletes ALL endpoints before terraform
+- **Fixed**: Pre-destroy script handles endpoint configurations and models
+- **Fixed**: Retry mechanism for stubborn resources
+
 **✅ Terraform Destroy Errors:**
 - **Fixed**: All S3 buckets now have `force_destroy = true`
 - **Fixed**: SageMaker notebooks auto-stop before deletion
+- **Fixed**: Comprehensive pre-destroy cleanup prevents conflicts
 
 **✅ Duplicate Resources:**
 - **Fixed**: Project structure optimized, all duplicates removed
